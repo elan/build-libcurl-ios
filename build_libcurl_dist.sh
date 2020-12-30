@@ -22,7 +22,7 @@ function build_for_arch() {
   export PATH="${DEVROOT}/usr/bin/:${PATH}"
   export CFLAGS="-DCURL_BUILD_IOS -arch ${ARCH} -pipe -Os -gdwarf-2 -isysroot ${SYSROOT} -miphoneos-version-min=${IPHONEOS_DEPLOYMENT_TARGET} -fembed-bitcode"
   export LDFLAGS="-arch ${ARCH} -isysroot ${SYSROOT}"
-  ./configure --disable-shared --without-zlib --enable-static --enable-ipv6 ${SSL_FLAG} --host="${HOST}" --prefix=${PREFIX} && make -j8 && make install
+  ./configure --disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher --disable-rtmp --without-libidn2 --without-librtmp --disable-shared --with-zlib --enable-static --enable-ipv6 ${SSL_FLAG} --host="${HOST}" --prefix=${PREFIX} && make -j16 && make install
 }
 
 if [ "${1:-''}" == "openssl" ]
@@ -49,6 +49,7 @@ build_for_arch armv7 armv7-apple-darwin ${XCODE_DEV}/Platforms/iPhoneOS.platform
 mkdir -p ${TMP_DIR}/lib/
 ${DEVROOT}/usr/bin/lipo \
   -arch x86_64 ${TMP_DIR}/x86_64/lib/libcurl.a \
+  -arch i386 ${TMP_DIR}/i386/lib/libcurl.a \
   -arch armv7 ${TMP_DIR}/armv7/lib/libcurl.a \
   -arch armv7s ${TMP_DIR}/armv7s/lib/libcurl.a \
   -arch arm64 ${TMP_DIR}/arm64/lib/libcurl.a \
